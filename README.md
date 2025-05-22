@@ -114,3 +114,6 @@ Admin dashboard to analyze answers for marketing insights
 
 CRM integration (e.g., Klaviyo for email flows)
 
+
+## Usage
+Open index.html in a browser to try the onboarding form and generate a custom checklist.
