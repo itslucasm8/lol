@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist - My Little France</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .question {
+            display: flex;
+            flex-direction: column;
+        }
+        .answers {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            background-color: #0069d9;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0053b0;
+        }
+        .checklist {
+            margin-top: 20px;
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .checklist a {
+            text-decoration: none;
+            color: white;
+            background: #28a745;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Ton plan d'action</h1>
+    <form id="onboarding">
+        <div class="question">
+            <label>As-tu un TFN ?</label>
+            <div class="answers">
+                <label><input type="radio" name="tfn" value="yes" required> Oui</label>
+                <label><input type="radio" name="tfn" value="no"> Non</label>
+            </div>
+        </div>
+        <div class="question">
+            <label>As-tu déjà ouvert un compte bancaire ?</label>
+            <div class="answers">
+                <label><input type="radio" name="bank" value="yes" required> Oui</label>
+                <label><input type="radio" name="bank" value="no"> Non</label>
+            </div>
+        </div>
+        <div class="question">
+            <label>As-tu besoin d’une adresse postale ?</label>
+            <div class="answers">
+                <label><input type="radio" name="postal" value="yes" required> Oui</label>
+                <label><input type="radio" name="postal" value="no"> Non</label>
+            </div>
+        </div>
+        <div class="question">
+            <label>Tu cherches un job ?</label>
+            <div class="answers">
+                <label><input type="radio" name="job" value="yes" required> Oui</label>
+                <label><input type="radio" name="job" value="no"> Non</label>
+            </div>
+        </div>
+        <div class="question">
+            <label>Tu veux une carte SIM australienne ?</label>
+            <div class="answers">
+                <label><input type="radio" name="sim" value="yes" required> Oui</label>
+                <label><input type="radio" name="sim" value="no"> Non</label>
+            </div>
+        </div>
+        <button type="submit">Voir ma checklist</button>
+    </form>
+
+    <ul id="results" class="checklist"></ul>
+
+    <div id="email-section" style="display:none; margin-top:20px;">
+        <input type="email" id="email" placeholder="Ton adresse mail" style="padding:8px; width:100%; box-sizing:border-box;" />
+        <button id="email-btn" style="margin-top:10px;">Recevoir par mail</button>
+    </div>
+
+    <script>
+        const steps = [
+            { id: 'tfn', title: 'Obtiens ton TFN', cta: 'Accède à notre service', link: 'https://mylittlefrance.com.au/tfn', condition: a => !a.tfn },
+            { id: 'bank', title: 'Ouvre un compte bancaire', cta: 'Ouvrir maintenant', link: 'https://mylittlefrance.com.au/bank', condition: a => !a.bank },
+            { id: 'postal', title: 'Commande une adresse postale', cta: 'Adresse 30% off', link: 'https://mylittlefrance.com.au/adresse-postale', condition: a => a.postal },
+            { id: 'jobclub', title: 'Rejoins notre Job Club', cta: 'Découvrir', link: 'https://mylittlefrance.com.au/job-club', condition: a => a.job },
+            { id: 'cv', title: 'Rédige ton CV australien', cta: 'Voir nos options', link: 'https://mylittlefrance.com.au/cv', condition: a => a.job },
+            { id: 'sim', title: 'Obtiens une carte SIM', cta: 'Voir nos bons plans', link: 'https://mylittlefrance.com.au/sim', condition: a => a.sim },
+        ];
+
+        document.getElementById('onboarding').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const answers = {
+                tfn: formData.get('tfn') === 'yes',
+                bank: formData.get('bank') === 'yes',
+                postal: formData.get('postal') === 'yes',
+                job: formData.get('job') === 'yes',
+                sim: formData.get('sim') === 'yes'
+            };
+            const list = document.getElementById('results');
+            list.innerHTML = '';
+            const selected = steps.filter(step => step.condition(answers));
+            selected.forEach(step => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${step.title}</span><a href="${step.link}" target="_blank">${step.cta}</a>`;
+                list.appendChild(li);
+            });
+            if (selected.length > 0) {
+                document.getElementById('email-section').style.display = 'block';
+            }
+        });
+
+        document.getElementById('email-btn').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            if(!email) return alert('Merci de saisir une adresse mail');
+            alert('Fonction d\'envoi par mail à intégrer.');
+        });
+    </script>
+</body>
+</html>
