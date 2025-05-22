@@ -114,3 +114,12 @@ Admin dashboard to analyze answers for marketing insights
 
 CRM integration (e.g., Klaviyo for email flows)
 
+
+## Usage
+Run a small local server and open the page in your browser:
+
+```bash
+npm start
+```
+
+Then visit [http://localhost:3000](http://localhost:3000) to use the questionnaire. You can also open `index.html` directly without a server if preferred.
